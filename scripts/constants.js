@@ -1,3 +1,4 @@
+const FRAME_WAIT = 10
 const NUM_PLAYERS = 2
 
 // CANVAS
@@ -26,5 +27,15 @@ const INPUT = [
 		LEFT: 'ArrowLeft',
 		RIGHT: 'ArrowRight',
 		JUMP: 'ArrowUp'
+	},
+	{
+		LEFT: '',
+		RIGHT: '',
+		JUMP: ''
+	},
+	{
+		LEFT: '',
+		RIGHT: '',
+		JUMP: ''
 	}
 ]
