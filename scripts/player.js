@@ -9,7 +9,7 @@ class Player {
 	constructor({position, velocity, playerNum}) {
 		this.position = position
 		this.velocity = velocity
-		this.playerNum = playerNum - 1
+		this.playerNum = playerNum
 	}
 
 	isGrounded() {
@@ -81,5 +81,16 @@ class Player {
 			this.doubleJumps--
 			this.jumpReleased = false
 		}
+	}
+
+	hit(other) {
+		return this.position.x + this.width > other.position.x 
+		&& this.position.x < other.position.x + other.width 
+		&& this.position.y + this.height > other.position.y
+		&& this.position.y < other.position.y
+	}
+
+	bounce() {
+		this.velocity.y = -BOUNCE_FORCE
 	}
 }

@@ -4,29 +4,20 @@ const context = canvas.getContext('2d')
 canvas.width = CANVAS_WIDTH
 canvas.height = CANVAS_HEIGHT
 
-const player1 = new Player({
-	position: {
-		x: 0,
-		y: 0
-	},
-	velocity: {
-		x: 0,
-		y: 0
-	},
-	playerNum: 1
-})
-
-const player2 = new Player({
-	position: {
-		x: 500,
-		y: 0
-	},
-	velocity: {
-		x: 0,
-		y: 0
-	},
-	playerNum: 2
-})
+const players = []
+for(let i=0; i<NUM_PLAYERS; i++) {
+	players.push(new Player({
+		position: {
+			x: canvas.width / NUM_PLAYERS * (i + .5),
+			y: 0
+		},
+		velocity: {
+			x: 0,
+			y: 0
+		},
+		playerNum: i
+	}))
+}
 
 const keys = []
 for(let i=0; i<INPUT.length; i++) {
@@ -44,8 +35,17 @@ function update() {
 	context.fillStyle = 'black'
 	context.fillRect(0, 0, canvas.width, canvas.height)
 
-	player1.update()
-	player2.update()
+	for(let i=0; i<NUM_PLAYERS; i++) {
+		players[i].update()
+	}
+
+	// Collision Detection
+	for(let i=0; i<NUM_PLAYERS; i++) {
+		for(let j=0; j<NUM_PLAYERS; j++) {
+			if(i != j && players[i].hit(players[j]))
+				players[i].bounce()
+		}
+	}
 }
 
 update()
