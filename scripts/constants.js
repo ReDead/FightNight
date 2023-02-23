@@ -5,13 +5,23 @@ const CANVAS_HEIGHT = 576
 // PHYSICS
 const GRAVITY = 1
 const MAX_FALL_SPEED = 20
-const WALK_ACCEL = 3
+const WALK_ACCEL = 1
+const WALK_DECEL = 1
 const MAX_WALK_SPEED = 10
 const JUMP_FORCE = 15
 const DOUBLE_JUMPS = document.getElementById('double').value
 const JUMP_TIME = 10
 
 // INPUT
-const LEFT = 'a'
-const RIGHT = 'd'
-const JUMP = ' '
+const INPUT = [
+	{
+		LEFT: 'a',
+		RIGHT: 'd',
+		JUMP: 'w'
+	},
+	{
+		LEFT: 'ArrowLeft',
+		RIGHT: 'ArrowRight',
+		JUMP: 'ArrowUp'
+	}
+]

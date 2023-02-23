@@ -12,19 +12,29 @@ const player1 = new Player({
 	velocity: {
 		x: 0,
 		y: 0
-	}
+	},
+	playerNum: 1
 })
 
-const keys = {
-	left: {
-		pressed: false
+const player2 = new Player({
+	position: {
+		x: 500,
+		y: 0
 	},
-	right: {
-		pressed: false
+	velocity: {
+		x: 0,
+		y: 0
 	},
-	jump: {
-		pressed: false
-	}
+	playerNum: 2
+})
+
+const keys = []
+for(let i=0; i<INPUT.length; i++) {
+	keys.push({
+		left: { pressed: false },
+		right: { pressed: false },
+		jump: { pressed: false }
+	})
 }
 
 function update() {
@@ -35,34 +45,39 @@ function update() {
 	context.fillRect(0, 0, canvas.width, canvas.height)
 
 	player1.update()
+	player2.update()
 }
 
 update()
 
 window.addEventListener('keydown', (event) => {
-	switch(event.key) {
-		case LEFT:
-			keys.left.pressed = true;
-			break
-		case RIGHT:
-			keys.right.pressed = true;
-			break
-		case JUMP:
-			keys.jump.pressed = true;
-			break
-	}
+	for(let i=0; i<INPUT.length; i++) {
+		switch(event.key) {
+			case INPUT[i].LEFT:
+				keys[i].left.pressed = true;
+				break
+			case INPUT[i].RIGHT:
+				keys[i].right.pressed = true;
+				break
+			case INPUT[i].JUMP:
+				keys[i].jump.pressed = true;
+				break
+		}
+	}	
 })
 
 window.addEventListener('keyup', (event) => {
-	switch(event.key) {
-		case LEFT:
-			keys.left.pressed = false;
-			break
-		case RIGHT:
-			keys.right.pressed = false;
-			break
-		case JUMP:
-			keys.jump.pressed = false;
-			break
+	for(let i=0; i<INPUT.length; i++) {
+		switch(event.key) {
+			case INPUT[i].LEFT:
+				keys[i].left.pressed = false;
+				break
+			case INPUT[i].RIGHT:
+				keys[i].right.pressed = false;
+				break
+			case INPUT[i].JUMP:
+				keys[i].jump.pressed = false;
+				break
+		}
 	}
 })

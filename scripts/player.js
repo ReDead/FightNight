@@ -1,14 +1,15 @@
 class Player {
-	width = 20
-	height = 100
+	width = 40
+	height = 50
 	isJumping = false
 	jumpReleased = true
 	doubleJumps = DOUBLE_JUMPS
 	jumpTime = JUMP_TIME
 
-	constructor({position, velocity}) {
+	constructor({position, velocity, playerNum}) {
 		this.position = position
 		this.velocity = velocity
+		this.playerNum = playerNum - 1
 	}
 
 	isGrounded() {
@@ -35,12 +36,18 @@ class Player {
 			this.velocity.y = MAX_FALL_SPEED
 
 		// walking
-		if(keys.left.pressed && !keys.right.pressed)
+		if(keys[this.playerNum].left.pressed && !keys[this.playerNum].right.pressed)
 			this.velocity.x -= WALK_ACCEL
-		else if(keys.right.pressed && !keys.left.pressed)
+		else if(keys[this.playerNum].right.pressed && !keys[this.playerNum].left.pressed)
 			this.velocity.x += WALK_ACCEL
-		else
-			this.velocity.x = 0
+		else if(this.isGrounded()) {
+			if(this.velocity.x < -WALK_DECEL)
+				this.velocity.x += WALK_DECEL
+			else if(this.velocity.x > WALK_DECEL)
+				this.velocity.x -= WALK_DECEL
+			else
+				this.velocity.x = 0
+		}
 
 		if(this.velocity.x > MAX_WALK_SPEED)
 			this.velocity.x = MAX_WALK_SPEED
@@ -54,22 +61,22 @@ class Player {
 		}
 
 		// jump
-		if(this.isGrounded() && keys.jump.pressed) {
+		if(this.isGrounded() && keys[this.playerNum].jump.pressed) {
 			this.isJumping = true
 			this.jumpReleased = false
 		}
-		if(keys.jump.pressed && this.isJumping && this.jumpTime > 0) {
+		if(keys[this.playerNum].jump.pressed && this.isJumping && this.jumpTime > 0) {
 			this.velocity.y = -JUMP_FORCE
 			this.jumpTime--
 		} else {
 			this.isJumping = false
 		}
 
-		if(!keys.jump.pressed)
+		if(!keys[this.playerNum].jump.pressed)
 			this.jumpReleased = true
 
 		// double jump
-		if(this.jumpReleased && keys.jump.pressed && !this.isGrounded() && this.velocity.y > 0 && this.doubleJumps > 0) {
+		if(this.jumpReleased && keys[this.playerNum].jump.pressed && !this.isGrounded() && this.velocity.y > 0 && this.doubleJumps > 0) {
 			this.velocity.y = -JUMP_FORCE
 			this.doubleJumps--
 			this.jumpReleased = false
