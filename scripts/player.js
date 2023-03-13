@@ -3,6 +3,9 @@ class Player extends Sprite {
 	jumpReleased = true
 	doubleJumps = DOUBLE_JUMPS
 	jumpTime = JUMP_TIME
+	score = 0
+	hide = false
+	movementLock = false
 
 	constructor({position, velocity, sprites, scale, playerNum, offset, hitbox}) {
 		super({position, velocity, image: sprites.idle, scale, offset})
@@ -20,6 +23,12 @@ class Player extends Sprite {
 	}
 
 	update() {
+		if(this.hide) {
+			this.velocity.x = 0
+			this.velocity.y = 0
+			return
+		}
+
 		this.draw()
 		this.animate()
 
@@ -30,13 +39,33 @@ class Player extends Sprite {
 		this.position.x += this.velocity.x
 		this.position.y += this.velocity.y
 
-		// gravity
+		// gravity and floor collision detection
 		this.velocity.y += GRAVITY
 		if(this.position.y + this.hitbox.height + this.velocity.y > canvas.height)
 			this.velocity.y = 0
-
 		if(this.velocity.y > MAX_FALL_SPEED)
 			this.velocity.y = MAX_FALL_SPEED
+
+		// wall collision detection
+		if(this.position.x + this.velocity.x < 0)
+			this.velocity.x = 0
+		if(this.position.x + this.hitbox.width + this.velocity.x > canvas.width)
+			this.velocity.x = 0
+
+		if(this.movementLock) {
+			if(this.isGrounded()) {
+				if(this.velocity.x < -WALK_DECEL)
+					this.velocity.x += WALK_DECEL
+				else if(this.velocity.x > WALK_DECEL)
+					this.velocity.x -= WALK_DECEL
+				else {
+					this.velocity.x = 0
+					this.image = this.sprites.idle.image
+					this.frames = this.sprites.idle.frames
+				}
+			}
+			return
+		}
 
 		// walking
 		if(keys[this.playerNum].left.pressed && !keys[this.playerNum].right.pressed) {
@@ -102,5 +131,10 @@ class Player extends Sprite {
 
 	bounce() {
 		this.velocity.y = -BOUNCE_FORCE
+	}
+
+	respawn() {
+		this.position.x = this.position.spawnX
+		this.position.y = this.position.spawnY
 	}
 }

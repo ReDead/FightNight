@@ -1,6 +1,7 @@
 class Sprite {
 	currFrame = 0
 	framesElapsed = 0
+	numAnimates = 0
 
 	constructor({position, velocity, image, scale, offset = {x:0, y:0}}) {
 		this.position = position
@@ -26,7 +27,9 @@ class Sprite {
 		this.framesElapsed++;
 		if(this.framesElapsed % FRAME_WAIT == 0)
 			this.currFrame++;
-		if(this.currFrame >= this.frames)
+		if(this.currFrame >= this.frames) {
 			this.currFrame = 0
+			this.numAnimates++
+		}
 	}
 }
